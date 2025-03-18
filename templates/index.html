@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket = io();
+        socket.on('connect', function() {
+            socket.emit('my event', {data: 'I\'m connected!'});
+        });
+    </script>
+
+    <title>ClassMate - Dziennik Szkolny</title>
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="/">
+                <h1>CLASSMATE</h1>
+                {% if profession != null %}
+                <h3>Zalogowany: {{ profession }} </h3>
+                {% endif %}
+            </a>
+        </div>
+        <div class="header-right">
+            <span class="welcome">Witaj {{ firstName }} {{ lastName }}!</span>
+            <a href="/logout" class="logout">Wyloguj</a>
+        </div>
+    </header>
+
+    <!-- 
+         konta do testów: admin - admin
+         administracja: annakow - 12345
+         nauczyciel: jan_kowalski - 12345
+         uczeń: dominik_nowak - 12345
+         rodzic: dn_rodzic - 12345
+         -->
+
+    <div class="container">
+
+        {% block content %}
+        
+        <div class="container">
+            {% if profession == 'nauczyciel' %}
+                <script>
+                    window.location.href = "/teacherView"; 
+                </script>
+            {% elif profession == 'uczen' %}
+                <script>
+                    window.location.href = "/studentView"; 
+                </script>
+            {% elif profession == 'administracja' %}
+                <script>
+                    window.location.href = "/administrationView"; 
+                </script>
+            {% elif profession == 'rodzic' %}
+                <script>
+                    window.location.href = "/parentView";
+                </script>
+            {% else %}
+                <p>Nieznana rola użytkownika. Proszę się skontaktować z administratorem.</p>
+            {% endif %}
+        </div>
+        
+
+        {% endblock %}
+    </div>
+
+
+</body>
+
+</html>

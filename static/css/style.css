@@ -1,0 +1,1051 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: whitesmoke;
+    color: #FF9F1C;
+    padding: 2rem;
+}
+
+.header {
+    background-color: #1f7e75;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    color: white;
+    top: 40px;
+    width: 100%;
+    max-width: 100rem;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-left a {
+    text-decoration: none;
+    color: white;
+}
+
+/* .logo {
+height: 40px;
+margin-right: 10px;
+}
+
+.logo-text {
+font-size: 1.5em;
+font-weight: bold;
+color: white;
+text-decoration: none;
+} */
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.welcome {
+    margin-right: 20px;
+    font-size: 1em;
+}
+
+.logout {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #2EC4B6;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.logout:hover {
+    background-color: #1c6f67;
+}
+
+.container {
+    width: 90%;
+    max-width: 100rem;
+    display: flex;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.partialView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+.sidebar {
+    width: 20%;
+    background-color: #FFBF69;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: #fff;
+}
+
+.sidebar h2 {
+    font-size: 1.4em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1em;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #FF9F1C;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #2EC4B6;
+}
+
+
+.main-content {
+    width: 80%;
+    padding: 40px;
+}
+
+.main-content h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #FF9F1C;
+}
+
+.notifications {
+    margin-top: 30px;
+    border-top: 2px solid #e0e0e0;
+    padding-top: 20px;
+}
+
+.notification {
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f8fafc;
+    border-left: 4px solid #FF9F1C;
+    border-radius: 4px;
+}
+
+.notification h3 {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.notification p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+#calendar2 {
+    width: 100%;
+    max-width: 1200px;
+    /* Maksymalna szerokość */
+    margin: 0 auto;
+    /* Wycentrowanie */
+}
+
+.decision-bar {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    align-items: center;
+}
+
+.decision-bar select,
+.decision-bar a {
+    color: black;
+    font-size: medium;
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #CBF3F0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    border: 1px solid #333;
+    margin-top: 1rem;
+}
+
+.addGradesBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addGradesBar a {
+    color: black;
+    font-size: medium;
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #CBF3F0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    border: 1px solid #333;
+}
+
+.addingGrade {
+    padding-top: 1rem;
+}
+
+.addingGrade select,
+.addingGrade input,
+.addingGrade button {
+    color: black;
+    font-size: medium;
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #CBF3F0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    border: 1px solid #333;
+}
+
+.tableKiwi {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tableKiwi th,
+td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.tableKiwi th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+#gradesContainer {
+    margin-top: 3rem;
+    display: none;
+}
+
+#tableAddGrade {
+    margin-top: 3rem;
+    display: none;
+}
+
+#openDialog {
+    display: none;
+}
+
+dialog {
+    position: fixed;
+    /* Ustawienie dialogu w kontekście całego viewportu */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Wyśrodkowanie */
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    background: white;
+    /* Tło dialogu */
+    z-index: 10;
+    /* Aby był na wierzchu */
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.dialog-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dialog-buttons button.cancel {
+    background-color: #ccc;
+}
+
+.dialog-buttons button.confirm {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#confirmGrades {
+    display: none;
+}
+
+dialog {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+}
+
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.dialog-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.dialog-content {
+    margin-bottom: 15px;
+}
+
+.dialog-footer {
+    text-align: right;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    user-select: none;
+    /* Zapobiega zaznaczaniu tekstu */
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+.editable {
+    cursor: pointer;
+}
+
+.selected {
+    border: 2px solid #000;
+}
+
+.status-btn {
+    margin: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.status-btn.selected {
+    background-color: #ccc;
+}
+
+.legend {
+    margin-top: 20px;
+}
+
+.grade-box {
+    display: inline-block;
+    border: 1px solid #ccc;
+    padding: 2px 5px;
+    margin: 2px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Styl dla okienka informacji */
+.tooltip {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.tooltip.show {
+    display: block;
+}
+
+.submitGradeButton {
+    display: flex;
+    justify-content: right;
+    margin-top: 1rem;
+}
+
+/* Formularz zastępstw */
+.replacementForm {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    /* Form dostosowuje się do szerokości kontenera */
+    max-width: 400px;
+    /* Ustawiamy maksymalną szerokość formularza */
+    margin: 20px 0;
+    /* Odstęp od innych elementów */
+}
+
+/* Nagłówek formularza */
+.replacementForm h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+/* Styl dla etykiet formularza */
+.replacementForm form label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+    color: #555;
+}
+
+/* Styl dla pól formularza (input, select) */
+.replacementForm form input,
+.replacementForm form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Styl przycisku formularza */
+.replacementForm form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.replacementForm form button:hover {
+    background-color: #0056b3;
+}
+
+/* Styl dla błędów walidacji (opcjonalne) */
+.replacementForm form input:invalid,
+.replacementForm form select:invalid {
+    border: 1px solid red;
+}
+
+/* Styl dla pomocniczych komunikatów */
+.replacementForm form .error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+
+
+/* administracja, zarządanie klasami */
+
+.btn {
+    color: black;
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #CBF3F0;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #25c6b6;
+}
+
+.classManagement_bar {
+    display: flex;
+    justify-content: right;
+}
+
+.modalEdit {
+    display: none;
+    /* Ukryty na start */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modalEdit-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+.closeEdit {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+.attendance-input {
+    border: none;
+    padding: 5px;
+    font-size: 16px;
+    position: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+
+}
+
+.status-btn.active {
+    background-color: #ccc;
+    color: #333;
+}
+/*style dla widoku wiadomosci*/
+.message {
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+}
+
+.container-messages {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for a 3D effect */
+    border-radius: 10px;
+}
+
+.sidebar-messages {
+    width: 25%;
+    background-color: #FFBF69;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: #fff;
+    height: 100%; /* Full height of the container */
+    overflow: hidden; /* Prevent overflow outside the container */
+    max-height:400px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.chat-area {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 400px;
+}
+.clear-button {
+    background-color:  #CBF3F0;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+#message-input {
+    width: 80%;
+    overflow-x: scroll;
+    height: 3rem;
+    border-radius: 5px;
+}
+
+#send-message-btn {
+    width: 15%;
+    height: 3rem;
+}
+
+.messages {
+    height: 100%;
+}
+
+.input-message-box {
+    padding: 10px;
+    background-color: #1f7e75;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.header-messages {
+    display: flex; /* Align button and h3 horizontally */
+    align-items: center; /* Vertically align items in the same line */
+    gap: 10px; /* Space between the button and the h3 */
+    padding: 5px;
+    border-bottom: 2px solid #FF9F1C;
+}
+
+.header-messages h4 {
+    width: 80%;
+}
+
+#create-room-button i {
+    font-size: 24px; /* Increase icon size */
+    width: auto;
+    height: auto;
+    transition: transform 0.3s ease; /* Optional: Add smooth scaling effect */
+    border: none;
+}
+
+#send-message-btn:hover {
+    background-color: #1c6f67;
+}
+
+#messages {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align messages to the right */
+    padding: 10px; /* Adjust the height of the message container */
+    overflow-y: auto; /* Enable scrolling if the messages exceed the container height */
+}
+
+.message {
+    background-color: #f0f0f0; /* Light background for messages */
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for a 3D effect */
+}
+
+#create-room-input {
+    width: 75%;
+    overflow-x: scroll;
+    height: 2rem;
+    border-radius: 5px;
+}
+
+#create-room-submit-btn,
+#close-room-button {
+    width: 10%;
+    height: 2rem;
+}
+
+.create-room-div {
+    display: none;
+    padding: 10px;
+    background-color: #1f7e75;
+    border: 1px solid #ccc;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.room {
+padding: 10px;
+margin: 5px 0;
+border-radius: 10px;
+background-color: #FF9F1C;
+color: white;
+cursor: pointer;
+text-align: left;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+width: 100%;
+position: relative;
+overflow-x: hidden;
+}
+#room-list {
+    overflow-y: auto; /* Enable vertical scrolling */
+    flex-grow: 1; /* Allow it to expand within the sidebar */
+    padding-right: 10px; /* Optional: Add space to avoid scrollbar overlap */
+}
+
+.room:hover {
+    background-color: #CBF3F0;
+    color: black;
+}
+.message-wrapper {
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word; /* Ensure long words are wrapped */
+    max-width: 60%;
+}
+
+.sender-name {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.time-sent {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+.suggestions {
+    position: absolute;
+    width: 30%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+}
+#userSuggestionsList {
+display: none;
+}
+
+#userSuggestionsList.active {
+display: block; /* Show suggestions when active */
+}
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+.no-matches {
+    padding: 10px;
+    color: #888;
+}
+.suggestion-item:hover,
+.suggestion-item.focused {
+background-color: #f0f0f0;
+}
+.room:hover::after {
+visibility: visible;
+opacity: 1; /* Fade in the tooltip */
+}
+.room::after {
+content: attr(title);
+position: absolute;
+left: 100%; /* Position the tooltip to the right of the room */
+top: 50%;
+transform: translateY(-50%); /* Center the tooltip vertically */
+background-color: #333;
+color: #fff;
+padding: 5px;
+border-radius: 5px;
+white-space: nowrap;
+visibility: hidden; /* Initially hidden */
+opacity: 0;
+transition: opacity 0.3s ease;
+z-index: 1; /* Ensure the tooltip is on top */
+}
+.room.active {
+background-color: #2EC4B6; /* Change this to your desired highlight color */
+}
+
+
+.current-user {
+align-self: flex-end;
+background-color: #d1f7c4; /* Light green for current user */
+text-align: right;
+}
+
+.other-user {
+align-self: flex-start;
+background-color: #f1f0f0; /* Light grey for other users */
+text-align: left;
+}
+
+/*style dla widoku wiadomosci*/
+
+/* Podstawowy styl dla kontenera tabeli */
+.table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Styl dla wiersza nagłówka */
+.table-header {
+    display: flex;
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+/* Styl dla komórek (komponentów w wierszach) */
+.table-cell {
+    padding: 10px;
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Stylowanie ostatniej komórki w wierszu bez prawej granicy */
+.table-row .table-cell:last-child {
+    border-right: none;
+}
+
+/* Stylowanie wierszy */
+.table-row {
+    display: flex;
+}
+
+/* Styl dla divów z ocenami */
+.grade {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px;
+    border: 1px solid #ddd;
+    background-color: #e9e9e9;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.grade:hover {
+    background-color: #ccc;
+}
+
+/* Stylizacja modalu */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    right: 10px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.attendance.attendance-table-container {
+    width: 970px;
+    height: 400px;
+    overflow: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.attendance table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance th,
+.attendance td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.attendance thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f8f8;
+    z-index: 2;
+}
+
+.attendance tbody td:first-child,
+.attendance thead th:first-child {
+    position: sticky;
+    left: 0;
+    background-color: #f8f8f8;
+    z-index: 1;
+}
+
+.attendance tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.attendance tbody tr:hover {
+    background-color: #eaeaea;
+}
+
+button.save-btn {
+    background-color: #2EC4B6;
+    color: white;
+    border: 2px solid #2EC4B6;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px; 
+    margin-bottom: 10px; 
+    margin-right: 15px; 
+}
+
+button.save-btn:hover {
+    background-color: #2EC4B6;
+    border-color: #2EC4B6;
+}
+
+button.save-btn:active {
+    background-color: #2EC4B6;
+    border-color: #2EC4B6;
+}
+
+button.save-btn:focus {
+    outline: none;
+    box-shadow: 0 0 5px #005f55;
+}
+
+
+.menuCreateSchedule{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 3rem;
+}
+
+.menuAddingNewSub{
+    display: flex;
+    justify-content:space-between; 
+    align-items: center;
+}
+
+.formForAddingLessons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.groupSection{
+    display: flex;
+    justify-content: center;
+    padding: 0.3rem;
+    align-items: center;
+}
+
+.groupSection label{
+    padding: 5px;
+}
+
+.newSubjectClass{
+    display: flex;
+    justify-content: center;
+}
+
+.addingTeacherToSubject {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:2rem;
+}
+
+
+.headerEditClass{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.barEditClass{
+    display: flex;
+    justify-content: space-between;
+    margin:1rem;
+}
+
+.formEditClass{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.groupKiwi{
+    padding: 0.5rem;
+}
+
+.btn_edytuj {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #2EC4B6;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn_edytuj:hover {
+    background-color: #1c6f67;
+}

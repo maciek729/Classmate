@@ -1,0 +1,210 @@
+{% extends "teacher/teacherView.html" %}
+
+{% block mainContent %}
+
+<div class="header">
+    <h2>Obecność uczniów</h2>
+    <div class="menu">
+        <label for="class-select">Wybierz klasę:</label>
+        <select id="class-select">
+            {% for class in classes %}
+                <option value="{{ class[0] }}">{{ class[1] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="subject-select">Wybierz przedmiot:</label>
+        <select id="subject-select">
+            {% for subject in subjects %}
+                <option value="{{ subject[0] }}">{{ subject[1] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class= "save-btn" id="confirm-btn">Zatwierdź</button>
+</div>
+
+<div class="legend">
+    <span>Legenda:</span>
+    <button class="status-btn" data-status="o">o - obecny</button>
+    <button class="status-btn" data-status="-">- - nieobecny</button>
+    <button class="status-btn" data-status="u">u - usprawiedliwiony</button>
+    <button class="status-btn" data-status="s">s - spóźniony</button>
+</div>
+
+<div class="attendance attendance-table-container" style="overflow-x: auto; overflow-y: auto; max-height: 400px; max-width: 100%;">
+    <table>
+        <thead>
+            <tr>
+                <th>Uczeń</th>
+                {% for lesson in lessons %}
+                    <th>{{ lesson[1] }} {{ lesson[2] }}</th> <!-- Data i godzina zajęć -->
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student[1] }}</td> <!-- Imię i nazwisko ucznia -->
+                {% for lesson in lessons %}
+                    <td><input type="text" class="attendance-input" data-lesson-id="{{ lesson[0] }}" data-student-id="{{ student[0] }}"></td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<button class="save-btn" id="save-btn">Zatwierdź zmiany</button>
+
+<script>
+document.getElementById('confirm-btn').addEventListener('click', getLessonsData);
+
+function getLessonsData() {
+    var classId = parseInt(document.getElementById('class-select').value);
+    var subjectId = parseInt(document.getElementById('subject-select').value);
+
+    fetch('/get-lessons', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ classId: classId, subjectId: subjectId }),
+    })
+    .then(response => response.json())
+    .then(data => displayLessonsData(data))
+    .catch(error => console.error('Error:', error));
+}
+
+function displayLessonsData(data) {
+    var lessons = data.lessons;
+    var students = data.students;
+    var attendance = data.attendance || {};
+    var table = document.querySelector('table');
+    var thead = table.querySelector('thead');
+    var tbody = table.querySelector('tbody');
+
+    // Clear the table headers
+    thead.innerHTML = '<tr><th>Uczeń</th></tr>';
+    
+    lessons.forEach(lesson => {
+        var th = document.createElement('th');
+        th.textContent = lesson[1] + ' ' + lesson[2]; // Data i godzina zajęć
+        thead.querySelector('tr').appendChild(th);
+    });
+
+    tbody.innerHTML = '';
+
+    students.forEach(student => {
+        var tr = document.createElement('tr');
+        var td = document.createElement('td');
+        td.textContent = student[1]; // Imię i nazwisko ucznia
+        tr.appendChild(td);
+
+        lessons.forEach(lesson => {
+            var td = document.createElement('td');
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.classList.add('attendance-input');
+            input.dataset.lessonId = lesson[0];
+            input.dataset.studentId = student[0];
+
+            // Jeśli istnieją dane o frekwencji, wstawiamy je
+            if (attendance[lesson[0]] && attendance[lesson[0]][student[0]]) {
+                input.value = attendance[lesson[0]][student[0]];
+            }
+
+            td.appendChild(input);
+            tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+    });
+
+    // Dodanie obsługi strzałek
+    addArrowNavigation();
+}
+
+function addArrowNavigation() {
+    const inputs = document.querySelectorAll('.attendance-input');
+
+    inputs.forEach(input => {
+        input.addEventListener('keydown', function(e) {
+            const key = e.key;
+            const currentInput = e.target;
+            const currentRow = currentInput.parentElement.parentElement;
+            const currentColumnIndex = Array.from(currentRow.children).indexOf(currentInput.parentElement);
+            const currentRowIndex = Array.from(currentRow.parentElement.children).indexOf(currentRow);
+            
+            switch (key) {
+                case "ArrowUp":
+                    if (currentRowIndex > 0) {
+                        e.preventDefault();
+                        currentRow.parentElement.children[currentRowIndex - 1].children[currentColumnIndex].querySelector('input').focus();
+                    }
+                    break;
+                case "ArrowDown":
+                    if (currentRowIndex < currentRow.parentElement.children.length - 1) {
+                        e.preventDefault();
+                        currentRow.parentElement.children[currentRowIndex + 1].children[currentColumnIndex].querySelector('input').focus();
+                    }
+                    break;
+                case "ArrowLeft":
+                    if (currentColumnIndex > 0) {
+                        e.preventDefault();
+                        currentRow.children[currentColumnIndex - 1].querySelector('input').focus();
+                    }
+                    break;
+                case "ArrowRight":
+                    if (currentColumnIndex < currentRow.children.length - 1) {
+                        e.preventDefault();
+                        currentRow.children[currentColumnIndex + 1].querySelector('input').focus();
+                    }
+                    break;
+            }
+        });
+    });
+}
+
+document.getElementById('save-btn').addEventListener('click', saveAttendanceChanges);
+
+function saveAttendanceChanges() {
+    var inputs = document.querySelectorAll('.attendance-input');
+    var attendanceData = [];
+    var validStatuses = ['o', '-', 'u', '', 's', /^u\(.+\)$/];
+
+    inputs.forEach(input => {
+        const value = input.value.trim();
+        const isValid = validStatuses.some(status => {
+            if (typeof status === 'string') {
+                return value === status;
+            } else {
+                return status.test(value);  // Sprawdzenie regex
+            }
+        });
+
+        if (!isValid) {
+            alert(`Niepoprawna wartość: ${value}. Dozwolone wartości to: o, -, s, u(powód)`);
+            input.focus();
+            throw new Error(`Invalid value: ${value}`);
+        }
+
+        attendanceData.push({
+            lessonId: input.dataset.lessonId,
+            studentId: input.dataset.studentId,
+            status: value,
+        });
+    });
+
+    fetch('/save-attendance', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ attendance: attendanceData }),
+    })
+    .then(response => response.json())
+    .then(data => alert('Zmiany zapisane!'))
+    .catch(error => console.error('Error:', error));
+}
+</script>
+
+{% endblock %}

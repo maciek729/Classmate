@@ -1,0 +1,322 @@
+{% extends "administration/administrationView.html" %}
+
+{% block mainContent %}
+
+<div class="menuAddingNewSub">
+    <section class="groupSection">
+        <label>Wybierz typ lekcji:</label>
+        <div>
+            <input type="radio" id="standardLesson" name="lessonType" value="standard" checked>
+            <label for="standardLesson">Standardowe dodawanie</label>
+        </div>
+        <div>
+            <input type="radio" id="singleLesson" name="lessonType" value="single">
+            <label for="singleLesson">Dodanie pojedynczej lekcji</label>
+        </div>
+    </section>
+
+    <a href="/createSchedule" class="btn">Wróć</a>
+</div>
+
+<div class="formForAddingLessons">
+
+    <form id="addLessonForm">
+
+        <section class="groupSection">
+            <label for="class-select">Wybierz klasę:</label>
+            <select class="btn" id="class-select">
+                <option value="" disabled selected>Wybierz klasę</option>
+            </select>
+        </section>
+
+        <section class="groupSection">
+            <label for="teacher-select">Wybierz nauczyciela:</label>
+            <select class="btn" id="teacher-select">
+                <option value="" disabled selected>Wybierz nauczyciela</option>
+            </select>
+        </section>
+
+        <section class="groupSection">
+
+            <label for="subject-select">Wybierz przedmiot:</label>
+            <select class="btn" id="subject-select">
+                <option value="" disabled selected>Wybierz przedmiot</option>
+            </select>
+        </section>
+
+        <section class="groupSection">
+
+            <label for="start_time">Godzina rozpoczęcia:</label>
+            <input name="start_time" id="start_time" type="time">
+        </section>
+
+
+        <section class="groupSection">
+            <label for="roomNumber">Numer sali:</label>
+            <input type="text" name="room_number" id="room_number">
+        </section>
+
+        <div class="standardView">
+
+            <section class="groupSection">
+                <label for="day-select">Wybierz dzień tygodnia:</label>
+                <select class="btn" id="day-select" name="day_select">
+                    <option value="" disabled selected>Wybierz dzień tygodnia</option>
+                    <option value="0">Poniedziałek</option>
+                    <option value="1">Wtorek</option>
+                    <option value="2">Środa</option>
+                    <option value="3">Czwartek</option>
+                    <option value="4">Piątek</option>
+                </select>
+            </section>
+
+            <section class="groupSection">
+                <label for="semester_start">Początek semestru:</label>
+                <input class="btn" type="date" name="semester_start" id="semester_start">
+            </section>
+
+            <section class="groupSection">
+                <label for="semester_end">Koniec semestru</label>
+                <input class="btn" type="date" name="semester_end" id="semester_end">
+            </section>
+        </div>
+
+        <div class="exactView">
+            <section class="groupSection">
+                <label for="exact_date">Dokładna data jeśli lekcja ma pojawić się jednorazowo</label>
+                <input class="btn" type="date" name="exact_date" id="exact_date">
+            </section>
+        </div>
+
+        <section class="groupSection">
+            <button type="submit" class="btn">Dodaj lekcję</button>
+        </section>
+
+    </form>
+
+</div>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Pobierz elementy sekcji dla standardowego widoku i widoku dokładnej daty
+        const standardView = document.querySelector('.standardView');
+        const exactView = document.querySelector('.exactView');
+
+        // Pobierz wszystkie przyciski radiowe
+        const radioButtons = document.querySelectorAll('input[name="lessonType"]');
+
+        // Funkcja przełączająca widoczność sekcji w zależności od wybranego typu lekcji
+        function toggleLessonType() {
+            const selectedType = document.querySelector('input[name="lessonType"]:checked').value;
+
+            if (selectedType === 'standard') {
+                // Pokaż standardowy widok, ukryj widok dokładnej daty
+                standardView.style.display = 'block';
+                exactView.style.display = 'none';
+            } else if (selectedType === 'single') {
+                // Pokaż widok dokładnej daty, ukryj standardowy widok
+                standardView.style.display = 'none';
+                exactView.style.display = 'block';
+            }
+        }
+
+        // Dodaj nasłuchiwanie na zmianę wyboru w przyciskach radiowych
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', toggleLessonType);
+        });
+
+        // Ustaw widoczność sekcji na podstawie domyślnego wyboru
+        toggleLessonType();
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var classSelect = document.getElementById('class-select');
+        var teacherSelect = document.getElementById('teacher-select');
+        var subjectSelect = document.getElementById('subject-select');
+
+        // Funkcja do wypełniania selecta klasami
+        function populateClassSelect(classes) {
+            classSelect.innerHTML = '<option value="" disabled selected>Wybierz klasę</option>'; // Wyczyść istniejące opcje
+            classes.forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls.id_class; // Ustaw id_class jako wartość
+                option.textContent = cls.class_name; // Wyświetl class_name
+                classSelect.appendChild(option);
+            });
+        }
+
+        // Pobierz klasy z backendu
+        fetch('/getAllClasses', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(classes => {
+                if (classes.length > 0) {
+                    populateClassSelect(classes); // Wypełnij select klasami
+                } else {
+                    console.error('Brak dostępnych klas w bazie danych.');
+                }
+            })
+            .catch(error => console.error('Błąd podczas pobierania klas:', error));
+
+
+
+        // Funkcja do wypełniania selecta nauczycielami
+        function populateTeacherSelect(teachers) {
+            teacherSelect.innerHTML = '<option value="" disabled selected>Wybierz nauczyciela</option>'; // Wyczyść istniejące opcje
+            teachers.forEach(tch => {
+                const option = document.createElement('option');
+                option.value = tch.id;
+                option.textContent = tch.name; // Wyświetl nazwe nauczyciela
+                teacherSelect.appendChild(option);
+            });
+        }
+
+        // Pobierz klasy z backendu
+        fetch('/getTeachersList', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(teachers => {
+                if (teachers.length > 0) {
+                    populateTeacherSelect(teachers); // Wypełnij select nauczycielami
+                } else {
+                    console.error('Brak dostępnych nauczycieli w bazie danych.');
+                }
+            })
+            .catch(error => console.error('Błąd podczas pobierania nauczycieli:', error));
+
+
+        // Funkcja do wypełniania selecta przedmiotami
+        function populateSubjectSelect(subjects) {
+            subjectSelect.innerHTML = '<option value="" disabled selected>Wybierz przedmiot</option>';
+            subjects.forEach(sbj => {
+                const option = document.createElement('option');
+                option.value = sbj.id;
+                option.textContent = sbj.name;
+                subjectSelect.appendChild(option);
+            });
+        }
+
+        // Funkcja pobierająca przedmioty dla wybranego nauczyciela
+        function fetchSubjectsForTeacher(teacherId) {
+            fetch('/getThisTeacherSubjects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id_teacher: teacherId }),
+            })
+                .then(response => response.json())
+                .then(subjects => {
+                    if (subjects.length > 0) {
+                        populateSubjectSelect(subjects);
+                    } else {
+                        console.error('Brak dostępnych przedmiotów dla wybranego nauczyciela.');
+                        subjectSelect.innerHTML = '<option value="" disabled selected>Brak przedmiotów</option>';
+                    }
+                })
+                .catch(error => console.error('Błąd podczas pobierania przedmiotów:', error));
+        }
+
+        // Listener na zmianę wybranego nauczyciela
+        teacherSelect.addEventListener('change', function () {
+            const teacherId = this.value;
+
+            if (teacherId) {
+                fetchSubjectsForTeacher(teacherId);
+            } else {
+                subjectSelect.innerHTML = '<option value="" disabled selected>Wybierz nauczyciela najpierw</option>';
+            }
+        });
+
+    });
+
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('addLessonForm');
+
+
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Zatrzymaj domyślne przesyłanie formularza
+
+            const id_class = document.getElementById('class-select').value;
+            const id_teacher = document.getElementById('teacher-select').value;
+            const id_subject = document.getElementById('subject-select').value;
+            const day_of_week = document.getElementById('day-select').value;
+            const start_time = document.getElementById('start_time').value;
+            const room_number = document.getElementById('room_number').value;
+            const exact_date = document.getElementById('exact_date').value;
+            const semester_start = document.getElementById('semester_start').value;
+            const semester_end = document.getElementById('semester_end').value;
+
+            // Pobierz dane z formularza
+            const data = {
+                id_class,
+                id_teacher,
+                id_subject,
+                day_of_week,
+                start_time,
+                room_number,
+                exact_date,
+                semester_start,
+                semester_end
+            };
+
+
+            if (!data.id_class || !data.id_teacher || !data.id_subject) {
+                alert('Wszystkie pola (klasa, nauczyciel, przedmiot) są wymagane!');
+                return;
+            }
+            if (!data.exact_date) {
+                delete data.exact_date; // Usuń `exact_date` z obiektu, jeśli jest pusty
+            }
+
+
+            // Wyślij dane do serwera za pomocą fetch
+            fetch('/addNewSubjectToPlan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Błąd podczas przesyłania danych.');
+                    }
+                })
+                .then(result => {
+                    console.log('Sukces:', result);
+                    alert('Lekcja została pomyślnie dodana.');
+                })
+                .catch(error => {
+                    console.error('Błąd:', error);
+                    alert('Wystąpił problem podczas dodawania lekcji.');
+                });
+        });
+    });
+
+
+
+
+
+</script>
+
+
+{% endblock %}
